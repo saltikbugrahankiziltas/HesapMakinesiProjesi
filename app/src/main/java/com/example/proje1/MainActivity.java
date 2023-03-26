@@ -34,7 +34,16 @@ public class MainActivity extends AppCompatActivity {
         img1=findViewById(R.id.ibu_logo);
         r1=findViewById(R.id.r1);
         display=findViewById(R.id.editText);
-        display.setShowSoftInputOnFocus(false);  //26ve27. satırda editText kısmına tıklanıldığında klavyenin açılmasını önleyecek kodlar yazıldı..
+        display.setShowSoftInputOnFocus(false);//26ve27. satırda editText kısmına tıklanıldığında klavyenin açılmasını önleyecek kodlar yazıldı..
+        display.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (getString(R.id.editText).equals(display.getText().toString())){
+                    display.setText("");
+                }
+            }
+        });
+
         Animation anim1= AnimationUtils.loadAnimation(getApplicationContext(),R.anim.logo);
         Animation anim2= AnimationUtils.loadAnimation(getApplicationContext(),R.anim.panel);
         img1.startAnimation(anim1);
@@ -71,8 +80,8 @@ public class MainActivity extends AppCompatActivity {
             case R.id.iki       :updateDisplay("2");break;
             case R.id.uc        :updateDisplay("3");break;
             case R.id.toplama   :updateDisplay("+");break;
-            case R.id.sifir     :updateDisplayThreeZero();break;
-            case R.id.virgul    :updateDisplay("0");break;
+            case R.id.sifir     :updateDisplay("0");break;
+            case R.id.virgul    :updateDisplay(",");break;
             case R.id.esittir   :calculateTheResult();break;
 
             
@@ -80,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @SuppressLint("ResourceType")
     private void calculateTheResult() {
         String textDisplay = display.getText().toString();
         String retextDisplay = textDisplay.replaceAll("%","/");
@@ -89,8 +99,9 @@ public class MainActivity extends AppCompatActivity {
         if (!result.equals("NaN")) {
             display.setText(result);
             display.setSelection(result.length());
-        }else {
-            showToast("Hatali Giris yaptiniz ");
+        }
+        else {
+            showToast("Hatalı Giriş Yaptınız");
         }
         enSonEsitBasildi=true;
 
@@ -110,20 +121,7 @@ public class MainActivity extends AppCompatActivity {
         toast.show();
     }
 
-    @SuppressLint("ResourceType")
-    private void updateDisplayThreeZero() {
-        int cursorPos=display.getSelectionStart();
-        if (getString(R.id.editText).equals(display.getText().toString())){
-            display.setText("000");
-        } else{
-            String oldDisplay = display.getText().toString();
-            String leftSideOfDisplay  = oldDisplay.substring(0,cursorPos);
-            String rightSideOfDisplay =  oldDisplay.substring(cursorPos);
-            String newText= leftSideOfDisplay+"000"+rightSideOfDisplay;
-            display.setText(newText);
-            display.setSelection(cursorPos+3);
-        }
-    }
+
 
     @SuppressLint("ResourceType")
     private void updateDisplay(String addCharToDisplay) {
@@ -147,9 +145,9 @@ public class MainActivity extends AppCompatActivity {
         for(int i=0;i<textDisplay.length();i++){
             if(textDisplay.substring(i,i+1).equalsIgnoreCase("("))countBrackets++;
             if(textDisplay.substring(i,i+1).equalsIgnoreCase(")"))countBrackets--;
-
         }
-        String lastCharOfTextDisplay = textDisplay.substring(textDisplay.length()-1);
+        String lastCharOfTextDisplay;
+        lastCharOfTextDisplay = textDisplay.substring(textDisplay.length()-1);
         if(countBrackets==0 || lastCharOfTextDisplay.equals("(")) updateDisplay("(");
         else if(countBrackets>0 && !lastCharOfTextDisplay.equals(")")) updateDisplay(")");
     }

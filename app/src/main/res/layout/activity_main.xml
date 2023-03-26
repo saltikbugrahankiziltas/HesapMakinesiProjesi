@@ -211,6 +211,7 @@
                 android:layout_height="70dp"
                 android:layout_marginRight="5dp"
                 android:background="@drawable/btn_1"
+                android:onClick="anyButton"
                 android:text="4"
                 android:textColor="@color/white"
                 android:textSize="20sp"
